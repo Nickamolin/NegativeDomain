@@ -23,6 +23,6 @@ const images = [
   "/art/z.JPG",
 ];
 
-export function ParallaxScrollDemo() {
+function ParallaxScrollDemo() {
   return <ParallaxScroll images={images} className="min-h-screen pb-100"/>;
 }
