@@ -1,23 +1,28 @@
 "use client"
 
 import { ParallaxBanner, ParallaxProvider } from 'react-scroll-parallax';
-
+import { ParallaxScroll } from "../components/ui/parallax-scroll";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
-        
-        <ParallaxProvider>
-          <ParallaxBanner
-            layers={[{ image: '/branding/banner.jpg', speed: -15 }]}
-            className="aspect-[2/1]"
-          />
-        </ParallaxProvider>
-
-        {/* <img src="/branding/banner.jpg"></img> */}
-
-      </div>
+    <main className="flex min-h-screen flex-col items-center justify-between">
+      <ParallaxScrollDemo></ParallaxScrollDemo>
     </main>
   );
+}
+
+const images = [
+  "/art/habitualConfinement.png",
+  "/art/iceCold.PNG",
+  "/art/hellfire.PNG",
+  "/art/lost.jpg",
+  "/art/n.JPG",
+  "/art/newLight.PNG",
+  "/art/nightlife.jpg",
+  "/art/watcher.PNG",
+  "/art/z.JPG",
+];
+
+export function ParallaxScrollDemo() {
+  return <ParallaxScroll images={images} className="min-h-screen pb-100"/>;
 }
