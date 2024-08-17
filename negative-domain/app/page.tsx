@@ -5,7 +5,7 @@ import { ParallaxScroll } from "../components/ui/parallax-scroll";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main className="flex min-h-screen flex-col items-center justify-between bg-black">
       <ParallaxScrollDemo></ParallaxScrollDemo>
     </main>
   );
