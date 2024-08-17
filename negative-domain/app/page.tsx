@@ -13,14 +13,14 @@ export default function Home() {
 
 const images = [
   "/art/habitualConfinement.png",
-  "/art/iceCold.PNG",
-  "/art/hellfire.PNG",
-  "/art/lost.jpg",
-  "/art/n.JPG",
-  "/art/newLight.PNG",
   "/art/nightlife.jpg",
-  "/art/watcher.PNG",
+  "/art/iceCold.PNG",
   "/art/z.JPG",
+  "/art/n.JPG",
+  "/art/hellfire.PNG",
+  "/art/watcher.PNG",
+  "/art/newLight.PNG",
+  "/art/lost.jpg"
 ];
 
 function ParallaxScrollDemo() {

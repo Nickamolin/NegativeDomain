@@ -25,9 +25,27 @@ export const ParallaxScroll = ({
 
   const third = Math.ceil(images.length / 3);
 
-  const firstPart = images.slice(0, third);
-  const secondPart = images.slice(third, 2 * third);
-  const thirdPart = images.slice(2 * third);
+  // const firstPart = images.slice(0, third);
+  // const secondPart = images.slice(third, 2 * third);
+  // const thirdPart = images.slice(2 * third);
+  const firstPart: string[] = []
+  const secondPart: string[] = []
+  const thirdPart: string[] = []
+
+  for (let i = 0; i < images.length; i++) {
+    let column = i % 3
+    switch (column) {
+      case 0:
+        firstPart.push(images[i])
+        break;
+      case 1:
+        secondPart.push(images[i])
+        break;
+      case 2:
+        thirdPart.push(images[i])
+        break;
+    }
+  }
 
   return (
     <div
@@ -41,7 +59,7 @@ export const ParallaxScroll = ({
         />
       </ParallaxProvider>
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start  max-w-5xl mx-auto gap-10 py-40 px-10"
+        className="grid grid-cols-1  lg:grid-cols-3 items-start  max-w-5xl mx-auto gap-10 py-40 px-10"
         ref={gridRef}
       >
         <div className="grid gap-10">
