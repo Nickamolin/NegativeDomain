@@ -55,7 +55,7 @@ export const ParallaxScroll = ({
       <ParallaxProvider>
         <ParallaxBanner
           layers={[{ image: '/branding/banner.jpg', speed: -7 }]}
-          className="md:aspect-[4/1] aspect-[3/2] ml-3"
+          className="md:aspect-[4/1] aspect-[3/2]"
         />
       </ParallaxProvider>
       <div

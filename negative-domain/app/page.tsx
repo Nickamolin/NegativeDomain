@@ -24,5 +24,5 @@ const images = [
 ];
 
 function ParallaxScrollDemo() {
-  return <ParallaxScroll images={images} className="min-h-screen pb-100"/>;
+  return <ParallaxScroll images={images} className="min-h-screen pb-50"/>;
 }
