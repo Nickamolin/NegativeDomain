@@ -57,29 +57,29 @@ export default function Gallery({ works }: GalleryProps) {
     });
 
     return (
-        <div ref={containerRef} className="w-full px-4 md:px-8 py-4">
+        <div ref={containerRef} className="relative w-full px-4 md:px-8 py-4">
             {/* Mobile View */}
             <div className="flex flex-col gap-4 lg:hidden">
-                {works.map((work) => (
-                    <GalleryItem key={work.id} work={work} />
+                {works.map((work, idx) => (
+                    <GalleryItem key={work.id} work={work} priority={idx < 3} />
                 ))}
             </div>
 
             {/* Desktop View */}
             <div className="hidden lg:grid grid-cols-3 gap-4 items-start">
                 <motion.div ref={col1Ref} style={{ y: y1 }} className="flex flex-col gap-4">
-                    {firstPart.map((work) => (
-                        <GalleryItem key={work.id} work={work} />
+                    {firstPart.map((work, idx) => (
+                        <GalleryItem key={work.id} work={work} priority={idx === 0} />
                     ))}
                 </motion.div>
                 <motion.div ref={col2Ref} style={{ y: y2 }} className="flex flex-col gap-4">
-                    {secondPart.map((work) => (
-                        <GalleryItem key={work.id} work={work} />
+                    {secondPart.map((work, idx) => (
+                        <GalleryItem key={work.id} work={work} priority={idx === 0} />
                     ))}
                 </motion.div>
                 <motion.div ref={col3Ref} style={{ y: y3 }} className="flex flex-col gap-4">
-                    {thirdPart.map((work) => (
-                        <GalleryItem key={work.id} work={work} />
+                    {thirdPart.map((work, idx) => (
+                        <GalleryItem key={work.id} work={work} priority={idx === 0} />
                     ))}
                 </motion.div>
             </div>
@@ -87,7 +87,7 @@ export default function Gallery({ works }: GalleryProps) {
     );
 }
 
-function GalleryItem({ work }: { work: Work }) {
+function GalleryItem({ work, priority = false }: { work: Work; priority?: boolean }) {
     return (
         <div className="w-full relative rounded-lg shadow-xl overflow-hidden group">
             <Image
@@ -98,6 +98,7 @@ function GalleryItem({ work }: { work: Work }) {
                 className="w-full h-auto hover:scale-[1.02] transition-transform duration-500"
                 unoptimized={true}
                 draggable={false}
+                priority={priority}
             />
         </div>
     );
