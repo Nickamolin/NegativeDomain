@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Work } from "./types";
 import LoadingScreen from "./LoadingScreen";
+import GalleryItem from "./GalleryItem";
 
 interface GalleryProps {
     works: Work[];
@@ -129,22 +129,5 @@ export default function Gallery({ works }: GalleryProps) {
                 </div>
             </div>
         </>
-    );
-}
-
-function GalleryItem({ work, priority = false }: { work: Work; priority?: boolean }) {
-    return (
-        <div className="w-full relative rounded-lg shadow-xl overflow-hidden group">
-            <Image
-                src={work.src_url}
-                alt={work.title}
-                width={800}
-                height={1200}
-                className="w-full h-auto hover:scale-[1.02] transition-transform duration-500"
-                unoptimized={true}
-                draggable={false}
-                priority={priority}
-            />
-        </div>
     );
 }
