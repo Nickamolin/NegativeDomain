@@ -12,12 +12,12 @@ export default function CRTWrapper({ children }: CRTWrapperProps) {
     return (
         <CRTEffect
             enabled={true}
-            sweepDuration={10}
-            sweepThickness={10}
+            sweepDuration={20}
+            sweepThickness={20}
             sweepStyle="classic"
-            scanlineOpacity={0.2}
-            scanlineThickness={2}
-            scanlineGap={3}
+            scanlineOpacity={0.05}
+            scanlineThickness={4}
+            scanlineGap={4}
             scanlineColor="rgba(91,179,135,0.2)"
             enableScanlines={true}
             scanlineOrientation="horizontal"
@@ -28,13 +28,13 @@ export default function CRTWrapper({ children }: CRTWrapperProps) {
             enableEdgeGlow={false}
             edgeGlowColor="rgba(0,255,128,0.2)"
             edgeGlowSize={30}
-            enableFlicker={false}
+            enableFlicker={true}
             flickerIntensity={0.08} // low, medium, high, or number
             flickerSpeed={0.8} // low, medium, high, number
-            enableGlitch={false}
-            glitchIntensity={0.6} // low, medium, high, number
-            glitchSpeed={0.6} // low, medium, high, number
-            enableVignette={false}
+            enableGlitch={true}
+            glitchIntensity={0.1} // low, medium, high, number
+            glitchSpeed={3} // low, medium, high, number
+            enableVignette={true}
             vignetteIntensity={0.4}
         >
             {children}
