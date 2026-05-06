@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Work } from "./types";
+import LoadingScreen from "./LoadingScreen";
 
 interface GalleryProps {
     works: Work[];
@@ -16,6 +17,47 @@ export default function Gallery({ works }: GalleryProps) {
     const col3Ref = useRef<HTMLDivElement>(null);
 
     const [heights, setHeights] = useState([0, 0, 0]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        if (!works || works.length === 0) {
+            setIsLoading(false);
+            return;
+        }
+
+        let isMounted = true;
+
+        // Enforce a minimum display time for the loading screen (e.g. 500ms)
+        const minDurationPromise = new Promise((resolve) => setTimeout(resolve, 500));
+
+        const imagesPromise = new Promise<void>((resolve) => {
+            let loaded = 0;
+            works.forEach((work) => {
+                const img = new window.Image();
+                img.src = work.src_url;
+
+                const handleLoad = () => {
+                    loaded++;
+                    if (loaded === works.length) {
+                        resolve();
+                    }
+                };
+
+                img.onload = handleLoad;
+                img.onerror = handleLoad; // Prevent getting stuck on broken image
+            });
+        });
+
+        Promise.all([minDurationPromise, imagesPromise]).then(() => {
+            if (isMounted) {
+                setIsLoading(false);
+            }
+        });
+
+        return () => {
+            isMounted = false;
+        };
+    }, [works]);
 
     useEffect(() => {
         if (!col1Ref.current || !col2Ref.current || !col3Ref.current) return;
@@ -57,33 +99,36 @@ export default function Gallery({ works }: GalleryProps) {
     });
 
     return (
-        <div ref={containerRef} className="relative w-full px-4 md:px-8 py-4">
-            {/* Mobile View */}
-            <div className="flex flex-col gap-4 lg:hidden">
-                {works.map((work, idx) => (
-                    <GalleryItem key={work.id} work={work} priority={idx < 3} />
-                ))}
-            </div>
+        <>
+            <LoadingScreen isVisible={isLoading} />
+            <div ref={containerRef} className="relative w-full px-4 md:px-8 py-4">
+                {/* Mobile View */}
+                <div className="flex flex-col gap-4 lg:hidden">
+                    {works.map((work, idx) => (
+                        <GalleryItem key={work.id} work={work} priority={idx < 3} />
+                    ))}
+                </div>
 
-            {/* Desktop View */}
-            <div className="hidden lg:grid grid-cols-3 gap-4 items-start">
-                <motion.div ref={col1Ref} style={{ y: y1 }} className="flex flex-col gap-4">
-                    {firstPart.map((work, idx) => (
-                        <GalleryItem key={work.id} work={work} priority={idx === 0} />
-                    ))}
-                </motion.div>
-                <motion.div ref={col2Ref} style={{ y: y2 }} className="flex flex-col gap-4">
-                    {secondPart.map((work, idx) => (
-                        <GalleryItem key={work.id} work={work} priority={idx === 0} />
-                    ))}
-                </motion.div>
-                <motion.div ref={col3Ref} style={{ y: y3 }} className="flex flex-col gap-4">
-                    {thirdPart.map((work, idx) => (
-                        <GalleryItem key={work.id} work={work} priority={idx === 0} />
-                    ))}
-                </motion.div>
+                {/* Desktop View */}
+                <div className="hidden lg:grid grid-cols-3 gap-4 items-start">
+                    <motion.div ref={col1Ref} style={{ y: y1 }} className="flex flex-col gap-4">
+                        {firstPart.map((work, idx) => (
+                            <GalleryItem key={work.id} work={work} priority={idx === 0} />
+                        ))}
+                    </motion.div>
+                    <motion.div ref={col2Ref} style={{ y: y2 }} className="flex flex-col gap-4">
+                        {secondPart.map((work, idx) => (
+                            <GalleryItem key={work.id} work={work} priority={idx === 0} />
+                        ))}
+                    </motion.div>
+                    <motion.div ref={col3Ref} style={{ y: y3 }} className="flex flex-col gap-4">
+                        {thirdPart.map((work, idx) => (
+                            <GalleryItem key={work.id} work={work} priority={idx === 0} />
+                        ))}
+                    </motion.div>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 
