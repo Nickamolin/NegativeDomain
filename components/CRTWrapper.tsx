@@ -10,7 +10,19 @@ interface CRTWrapperProps {
 
 export default function CRTWrapper({ children }: CRTWrapperProps) {
     return (
-        <CRTEffect preset="minimal">
+        <CRTEffect 
+            enableScanlines={true}
+            scanlineOpacity={0.15}
+            enableSweep={true}
+            enableFlicker={true}
+            flickerIntensity="low"
+            enableGlitch={true}
+            glitchIntensity="low"
+            enableVignette={true}
+            vignetteIntensity={0.3}
+            enableGlow={false}
+            enableEdgeGlow={false}
+        >
             {children}
         </CRTEffect>
     );
