@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
+import CRTWrapper from "@/components/CRTWrapper";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="relative">
-      <body className={cn(inter.className, "relative no-scrollbar")}>{children}</body>
+      <body className={cn(inter.className, "relative no-scrollbar")}>
+        <CRTWrapper>
+          {children}
+        </CRTWrapper>
+      </body>
     </html>
   );
 }

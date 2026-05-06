@@ -101,7 +101,7 @@ export default function Gallery({ works }: GalleryProps) {
     return (
         <>
             <LoadingScreen isVisible={isLoading} />
-            <div ref={containerRef} className="relative w-full px-4 md:px-8 py-4">
+            <div ref={containerRef} className="relative w-full px-4 py-4">
                 {/* Mobile View */}
                 <div className="flex flex-col gap-4 lg:hidden">
                     {works.map((work, idx) => (
