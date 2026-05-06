@@ -26,10 +26,11 @@ body {
       rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
-@utility no-scrollbar {
-  &::-webkit-scrollbar {
-    display: none;
-  }
+::-webkit-scrollbar {
+  display: none;
+}
+
+html, body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

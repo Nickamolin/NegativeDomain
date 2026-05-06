@@ -1,4 +1,8 @@
-import Image from 'next/image';
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Work } from "./types";
 
 interface GalleryProps {
@@ -6,20 +10,95 @@ interface GalleryProps {
 }
 
 export default function Gallery({ works }: GalleryProps) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const col1Ref = useRef<HTMLDivElement>(null);
+    const col2Ref = useRef<HTMLDivElement>(null);
+    const col3Ref = useRef<HTMLDivElement>(null);
+
+    const [heights, setHeights] = useState([0, 0, 0]);
+
+    useEffect(() => {
+        if (!col1Ref.current || !col2Ref.current || !col3Ref.current) return;
+
+        const observer = new ResizeObserver(() => {
+            setHeights([
+                col1Ref.current?.offsetHeight || 0,
+                col2Ref.current?.offsetHeight || 0,
+                col3Ref.current?.offsetHeight || 0,
+            ]);
+        });
+
+        observer.observe(col1Ref.current);
+        observer.observe(col2Ref.current);
+        observer.observe(col3Ref.current);
+
+        return () => observer.disconnect();
+    }, [works]);
+
+    const maxHeight = Math.max(...heights, 1);
+
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end end"],
+    });
+
+    const y1 = useTransform(scrollYProgress, [0, 1], [0, maxHeight - heights[0]]);
+    const y2 = useTransform(scrollYProgress, [0, 1], [0, maxHeight - heights[1]]);
+    const y3 = useTransform(scrollYProgress, [0, 1], [0, maxHeight - heights[2]]);
+
+    const firstPart: Work[] = [];
+    const secondPart: Work[] = [];
+    const thirdPart: Work[] = [];
+
+    works.forEach((work, i) => {
+        if (i % 3 === 0) firstPart.push(work);
+        else if (i % 3 === 1) secondPart.push(work);
+        else thirdPart.push(work);
+    });
+
     return (
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-4 p-4 space-y-4">
-            {works.map((work) => (
-                <div key={work.id} className="break-inside-avoid">
-                    <Image
-                        src={work.src_url}
-                        alt={work.title}
-                        width={800}
-                        height={1200}
-                        className="w-full h-auto rounded-lg shadow-xl hover:scale-[1.02] transition-transform duration-500"
-                        unoptimized={true}
-                    />
-                </div>
-            ))}
+        <div ref={containerRef} className="w-full px-4 md:px-8 py-4">
+            {/* Mobile View */}
+            <div className="flex flex-col gap-4 lg:hidden">
+                {works.map((work) => (
+                    <GalleryItem key={work.id} work={work} />
+                ))}
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden lg:grid grid-cols-3 gap-4 items-start">
+                <motion.div ref={col1Ref} style={{ y: y1 }} className="flex flex-col gap-4">
+                    {firstPart.map((work) => (
+                        <GalleryItem key={work.id} work={work} />
+                    ))}
+                </motion.div>
+                <motion.div ref={col2Ref} style={{ y: y2 }} className="flex flex-col gap-4">
+                    {secondPart.map((work) => (
+                        <GalleryItem key={work.id} work={work} />
+                    ))}
+                </motion.div>
+                <motion.div ref={col3Ref} style={{ y: y3 }} className="flex flex-col gap-4">
+                    {thirdPart.map((work) => (
+                        <GalleryItem key={work.id} work={work} />
+                    ))}
+                </motion.div>
+            </div>
+        </div>
+    );
+}
+
+function GalleryItem({ work }: { work: Work }) {
+    return (
+        <div className="w-full relative rounded-lg shadow-xl overflow-hidden group">
+            <Image
+                src={work.src_url}
+                alt={work.title}
+                width={800}
+                height={1200}
+                className="w-full h-auto hover:scale-[1.02] transition-transform duration-500"
+                unoptimized={true}
+                draggable={false}
+            />
         </div>
     );
 }
