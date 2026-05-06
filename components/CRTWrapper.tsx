@@ -10,20 +10,34 @@ interface CRTWrapperProps {
 
 export default function CRTWrapper({ children }: CRTWrapperProps) {
     return (
-        <CRTEffect 
+        <CRTEffect
+            enabled={true}
+            sweepDuration={10}
+            sweepThickness={10}
+            sweepStyle="classic"
+            scanlineOpacity={0.2}
+            scanlineThickness={2}
+            scanlineGap={3}
+            scanlineColor="rgba(91,179,135,0.2)"
             enableScanlines={true}
-            scanlineOpacity={0.15}
+            scanlineOrientation="horizontal"
             enableSweep={true}
-            enableFlicker={true}
-            flickerIntensity="low"
-            enableGlitch={true}
-            glitchIntensity="low"
-            enableVignette={true}
-            vignetteIntensity={0.3}
+            theme="custom"
             enableGlow={false}
+            glowColor="rgba(0,255,128,0.3)"
             enableEdgeGlow={false}
+            edgeGlowColor="rgba(0,255,128,0.2)"
+            edgeGlowSize={30}
+            enableFlicker={false}
+            flickerIntensity={0.08} // low, medium, high, or number
+            flickerSpeed={0.8} // low, medium, high, number
+            enableGlitch={false}
+            glitchIntensity={0.6} // low, medium, high, number
+            glitchSpeed={0.6} // low, medium, high, number
+            enableVignette={false}
+            vignetteIntensity={0.4}
         >
             {children}
-        </CRTEffect>
+        </CRTEffect >
     );
 }
