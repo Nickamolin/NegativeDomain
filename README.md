@@ -15,11 +15,11 @@ This art gallery is built with Next.js and React, featuring a unique parallax sc
 
 <h3>Skills Learned</h3>
 
-- Next.js 14 - Modern React framework with App Router and server-side rendering.
-- React 18 - Component-based architecture with hooks and modern React patterns.
+- Next.js 16 - Modern React framework with App Router and server-side rendering.
+- React 19 - Component-based architecture with hooks and modern React patterns.
 - Framer Motion - Advanced animation library for smooth scroll-based animations.
 - Parallax Scrolling - Multi-layer parallax effects with react-scroll-parallax.
-- Tailwind CSS 3 - Utility-first CSS framework with responsive design.
+- Tailwind CSS 4 - Utility-first CSS framework with responsive design.
 - TypeScript 5 - Type-safe development with enhanced developer experience.
 - Image Optimization - Next.js Image component for performance optimization.
 - Responsive Design - Mobile-first approach with breakpoint-specific layouts.

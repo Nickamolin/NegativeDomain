@@ -15,8 +15,8 @@ export const ParallaxScroll = ({
 }) => {
   const gridRef = useRef<any>(null);
   const { scrollYProgress } = useScroll({
-    container: gridRef, // remove this if your container is not fixed height
-    offset: ["start start", "end start"], // remove this if your container is not fixed height
+    container: gridRef,
+    offset: ["start start", "end start"],
   });
 
   const translateFirst = useTransform(scrollYProgress, [0, 1], [0, -200]);
@@ -25,9 +25,6 @@ export const ParallaxScroll = ({
 
   const third = Math.ceil(images.length / 3);
 
-  // const firstPart = images.slice(0, third);
-  // const secondPart = images.slice(third, 2 * third);
-  // const thirdPart = images.slice(2 * third);
   const firstPart: string[] = []
   const secondPart: string[] = []
   const thirdPart: string[] = []
@@ -60,7 +57,6 @@ export const ParallaxScroll = ({
       </ParallaxProvider>
       <div
         className="grid grid-cols-1 lg:grid-cols-3 items-start mx-auto gap-10 py-40 px-10"
-        ref={gridRef}
       >
         <div className="grid gap-10 lg:hidden">
           {images.map((el, idx) => (

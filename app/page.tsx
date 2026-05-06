@@ -1,6 +1,5 @@
 "use client"
 
-import { ParallaxBanner, ParallaxProvider } from 'react-scroll-parallax';
 import { ParallaxScroll } from "../components/ui/parallax-scroll";
 
 export default function Home() {
