@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Work } from "./types";
 import LoadingScreen from "./LoadingScreen";
 import GalleryItem from "./GalleryItem";
+import CRTWrapper from "./CRTWrapper";
 
 interface GalleryProps {
     works: Work[];
@@ -15,47 +16,67 @@ export default function Gallery({ works }: GalleryProps) {
     const col1Ref = useRef<HTMLDivElement>(null);
     const col2Ref = useRef<HTMLDivElement>(null);
     const col3Ref = useRef<HTMLDivElement>(null);
+    const isMountedRef = useRef(true);
 
     const [heights, setHeights] = useState([0, 0, 0]);
     const [isLoading, setIsLoading] = useState(true);
+    const [activeId, setActiveId] = useState<number | null>(null);
+
+    const handleToggle = (id: number) => {
+        setActiveId(prev => prev === id ? null : id);
+    };
 
     useEffect(() => {
+        let isActive = true;
+
         if (!works || works.length === 0) {
             setIsLoading(false);
             return;
         }
 
-        let isMounted = true;
-
-        // Enforce a minimum display time for the loading screen (e.g. 500ms)
         const minDurationPromise = new Promise((resolve) => setTimeout(resolve, 500));
 
-        const imagesPromise = new Promise<void>((resolve) => {
-            let loaded = 0;
-            works.forEach((work) => {
-                const img = new window.Image();
-                img.src = work.src_url;
+        const imagesPromise = Promise.all(
+            works.map(
+                (work) =>
+                    new Promise<void>((resolve) => {
+                        let isResolved = false;
+                        const complete = () => {
+                            if (!isResolved) {
+                                isResolved = true;
+                                resolve();
+                            }
+                        };
 
-                const handleLoad = () => {
-                    loaded++;
-                    if (loaded === works.length) {
-                        resolve();
-                    }
-                };
+                        const img = new window.Image();
+                        img.onload = complete;
+                        img.onerror = complete;
+                        img.src = work.src_url;
 
-                img.onload = handleLoad;
-                img.onerror = handleLoad; // Prevent getting stuck on broken image
+                        if (img.complete) {
+                            complete();
+                        } else {
+                            setTimeout(complete, 5000);
+                        }
+                    })
+            )
+        );
+
+        Promise.all([minDurationPromise, imagesPromise])
+            .then(() => {
+                if (isActive) setIsLoading(false);
+            })
+            .catch(() => {
+                if (isActive) setIsLoading(false);
             });
-        });
 
-        Promise.all([minDurationPromise, imagesPromise]).then(() => {
-            if (isMounted) {
-                setIsLoading(false);
-            }
-        });
+        const fallbackTimer = setTimeout(() => {
+            if (isActive) setIsLoading(false);
+        }, 6000);
 
         return () => {
-            isMounted = false;
+            isActive = false;
+            clearTimeout(fallbackTimer);
         };
     }, [works]);
 
@@ -98,34 +119,78 @@ export default function Gallery({ works }: GalleryProps) {
         else thirdPart.push(work);
     });
 
+    const renderGrid = (isOverlay: boolean) => (
+        <div className="relative w-full px-4 py-4">
+            {/* Mobile View */}
+            <div className="flex flex-col gap-4 lg:hidden">
+                {works.map((work, idx) => (
+                    <GalleryItem
+                        key={work.id}
+                        work={work}
+                        priority={idx < 3}
+                        isActive={activeId === work.id}
+                        onToggle={() => handleToggle(work.id)}
+                        isOverlay={isOverlay}
+                    />
+                ))}
+            </div>
+
+            {/* Desktop View */}
+            <div className="hidden lg:grid grid-cols-3 gap-4 items-start">
+                <motion.div ref={isOverlay ? null : col1Ref} style={{ y: y1 }} className="flex flex-col gap-4">
+                    {firstPart.map((work, idx) => (
+                        <GalleryItem
+                            key={work.id}
+                            work={work}
+                            priority={idx === 0}
+                            isActive={activeId === work.id}
+                            onToggle={() => handleToggle(work.id)}
+                            isOverlay={isOverlay}
+                        />
+                    ))}
+                </motion.div>
+                <motion.div ref={isOverlay ? null : col2Ref} style={{ y: y2 }} className="flex flex-col gap-4">
+                    {secondPart.map((work, idx) => (
+                        <GalleryItem
+                            key={work.id}
+                            work={work}
+                            priority={idx === 0}
+                            isActive={activeId === work.id}
+                            onToggle={() => handleToggle(work.id)}
+                            isOverlay={isOverlay}
+                        />
+                    ))}
+                </motion.div>
+                <motion.div ref={isOverlay ? null : col3Ref} style={{ y: y3 }} className="flex flex-col gap-4">
+                    {thirdPart.map((work, idx) => (
+                        <GalleryItem
+                            key={work.id}
+                            work={work}
+                            priority={idx === 0}
+                            isActive={activeId === work.id}
+                            onToggle={() => handleToggle(work.id)}
+                            isOverlay={isOverlay}
+                        />
+                    ))}
+                </motion.div>
+            </div>
+        </div>
+    );
+
     return (
         <>
+            {/* LoadingScreen is OUTSIDE the CRTWrapper so position:fixed works correctly */}
             <LoadingScreen isVisible={isLoading} />
-            <div ref={containerRef} className="relative w-full px-4 py-4">
-                {/* Mobile View */}
-                <div className="flex flex-col gap-4 lg:hidden">
-                    {works.map((work, idx) => (
-                        <GalleryItem key={work.id} work={work} priority={idx < 3} />
-                    ))}
-                </div>
 
-                {/* Desktop View */}
-                <div className="hidden lg:grid grid-cols-3 gap-4 items-start">
-                    <motion.div ref={col1Ref} style={{ y: y1 }} className="flex flex-col gap-4">
-                        {firstPart.map((work, idx) => (
-                            <GalleryItem key={work.id} work={work} priority={idx === 0} />
-                        ))}
-                    </motion.div>
-                    <motion.div ref={col2Ref} style={{ y: y2 }} className="flex flex-col gap-4">
-                        {secondPart.map((work, idx) => (
-                            <GalleryItem key={work.id} work={work} priority={idx === 0} />
-                        ))}
-                    </motion.div>
-                    <motion.div ref={col3Ref} style={{ y: y3 }} className="flex flex-col gap-4">
-                        {thirdPart.map((work, idx) => (
-                            <GalleryItem key={work.id} work={work} priority={idx === 0} />
-                        ))}
-                    </motion.div>
+            <div ref={containerRef} className="relative w-full">
+                {/* Background Grid - Affected by CRT */}
+                <CRTWrapper>
+                    {renderGrid(false)}
+                </CRTWrapper>
+
+                {/* Foreground Grid - Clean overlays escaping the CRT stacking context */}
+                <div className="absolute inset-0 pointer-events-none z-10000">
+                    {renderGrid(true)}
                 </div>
             </div>
         </>
