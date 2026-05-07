@@ -16,8 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn(inter.className, "no-scrollbar")}>{children}</body>
+    <html lang="en" className="relative">
+      <body className={cn(inter.className, "relative no-scrollbar")}>{children}</body>
     </html>
   );
 }
