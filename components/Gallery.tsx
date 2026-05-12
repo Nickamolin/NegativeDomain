@@ -5,7 +5,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Work } from "./types";
 import LoadingScreen from "./LoadingScreen";
 import GalleryItem from "./GalleryItem";
-import CRTWrapper from "./CRTWrapper";
 
 interface GalleryProps {
     works: Work[];
@@ -34,7 +33,7 @@ export default function Gallery({ works }: GalleryProps) {
             return;
         }
 
-        const minDurationPromise = new Promise((resolve) => setTimeout(resolve, 500));
+        const minDurationPromise = new Promise((resolve) => setTimeout(resolve, 1500));
 
         const imagesPromise = Promise.all(
             works.map(
@@ -183,10 +182,8 @@ export default function Gallery({ works }: GalleryProps) {
             <LoadingScreen isVisible={isLoading} />
 
             <div ref={containerRef} className="relative w-full">
-                {/* Background Grid - Affected by CRT */}
-                <CRTWrapper>
-                    {renderGrid(false)}
-                </CRTWrapper>
+                {/* Background Grid - each image has its own CRT effect */}
+                {renderGrid(false)}
 
                 {/* Foreground Grid - Clean overlays escaping the CRT stacking context */}
                 <div className="absolute inset-0 pointer-events-none z-10000">
