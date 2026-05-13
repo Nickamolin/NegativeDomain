@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import CRTWrapper from "./CRTWrapper";
 
 interface LoadingScreenProps {
     isVisible: boolean;
@@ -26,15 +27,19 @@ export default function LoadingScreen({ isVisible }: LoadingScreenProps) {
             className={`fixed inset-0 z-99999 bg-black flex items-center justify-center transition-opacity duration-700 ease-in-out ${isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
                 }`}
         >
-            <Image
-                src="/branding/logo.jpg"
-                alt="Negative Domain Logo"
-                width={200}
-                height={200}
-                priority
-                className="w-auto h-auto max-w-[50%] max-h-[50%] object-contain"
-                draggable={false}
-            />
+            <div className="max-w-[50vw] max-h-[50vh]">
+                <CRTWrapper enableScanlines={false} enableSweep={false} flickerIntensity={0.1}>
+                    <Image
+                        src="/branding/logo.jpg"
+                        alt="Negative Domain Logo"
+                        width={200}
+                        height={200}
+                        priority
+                        className="w-auto h-auto block object-contain max-w-full max-h-full"
+                        draggable={false}
+                    />
+                </CRTWrapper>
+            </div>
         </div>
     );
 }
