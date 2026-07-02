@@ -14,14 +14,15 @@ Built to display and present digital art in an engaging, modern web interface th
 This art gallery is built with **Next.js 16** and **React 19**, featuring a custom **Dual-Grid Rendering System** that allows clean high-fidelity images to "escape" a retro CRT aesthetic on interaction.
 
 The core architecture consists of two perfectly synchronized masonry grids:
-- **Background Grid**: Wrapped in a global **CRT monitor effect** (`vault66-crt-effect`), applying retro scanlines, flicker, and desaturation.
+- **Background Grid**: Each individual image is wrapped in a localized **CRT effect** (`vault66-crt-effect`), applying retro scanlines, flicker, and desaturation. This per-image implementation allows for unique animation parameters across the gallery.
+- **Randomized Animation Engine**: Implements client-side randomization for CRT sweep durations and phase offsets (using negative animation delays). This ensures that no two images share the same flicker or sweep rhythm, creating a more organic and non-repetitive visual experience.
 - **Foreground Grid**: Sits above the CRT layer, containing clean, fully-saturated images that fade in on interaction, bypassing the CRT filters and stacking context limitations.
 
 The project features a **Smart Interaction Model** that differentiates between desktop and mobile devices:
 - **Desktop**: Clean images are revealed via instant CSS `group-hover` transitions, restricted to fine-pointers only to prevent touch-interaction bugs.
 - **Mobile/Touch**: Implements a `pointer: coarse` detection system that enables a tap-to-toggle highlighting mechanism, allowing touch users to focus on one image at a time.
 
-The loading lifecycle is managed by a **Bulletproof Asset Preloader** that programmatically fetches all artwork from a **Supabase** backend, utilizing `img.complete` checks and global failsafe timers to ensure a seamless transition from the initial branding screen to the interactive gallery.
+The loading lifecycle is managed by a **Bulletproof Asset Preloader** that programmatically preloads all artwork from local static assets. It features a **CRT-enhanced branding screen** with individualized flicker effects, utilizing `img.complete` checks and global failsafe timers to ensure a seamless transition to the interactive gallery.
 
 <h3>Skills Learned</h3>
 
@@ -29,9 +30,9 @@ The loading lifecycle is managed by a **Bulletproof Asset Preloader** that progr
 - **Dual-Grid Architecture** - Synchronizing multiple absolute-positioned layers to bypass CSS filter stacking contexts.
 - **Smart Pointer Detection** - Using `matchMedia` with `pointer: coarse` and `hover: hover` to create distinct UX patterns for mouse and touch users.
 - **Advanced Asset Preloading** - Building robust programmatic image loaders with cache-detection and failsafe timeouts.
-- **Stacking Context Management** - Solving complex z-index and fixed-positioning conflicts created by modern CSS filters.
-- **Supabase Integration** - Dynamic data fetching and image storage management.
+- **Localized CRT Implementation** - Bypassing global filter performance bottlenecks by applying effects per-component.
+- **Animation Desynchronization** - Using negative CSS delays and client-side randomization to prevent synchronized "robotic" animation cycles.
 - **Framer Motion 12** - Implementing smooth, independent parallax column scrolling.
-- **Tailwind CSS 4** - Modern utility-first styling with advanced CSS-in-JS patterns.
-- **Mobile Optimization** - Resolving "Sticky Hover" bugs and ensuring 100vh layout stability across mobile browsers.
-- **Dev Server Configuration** - Managing `allowedDevOrigins` and network binding for cross-device local testing.
+- **Tailwind CSS 4** - Implementing the latest utility-first styling patterns and theme configurations.
+- **Mobile Interaction Stability** - Resolving "Sticky Hover" bugs and ensuring 100vh layout stability across modern mobile browsers.
+- **Static Asset Optimization** - Migrated from a database backend to a static configuration for instant load times, offline support, and zero-cost hosting.

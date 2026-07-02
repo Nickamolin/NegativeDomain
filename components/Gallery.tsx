@@ -33,7 +33,27 @@ export default function Gallery({ works }: GalleryProps) {
             return;
         }
 
-        const minDurationPromise = new Promise((resolve) => setTimeout(resolve, 1500));
+        const minDurationPromise = new Promise<void>((resolve) => {
+            let isResolved = false;
+            const startTimer = () => {
+                if (!isResolved) {
+                    isResolved = true;
+                    setTimeout(resolve, 1500);
+                }
+            };
+
+            const logoImg = new window.Image();
+            logoImg.onload = startTimer;
+            logoImg.onerror = startTimer;
+            logoImg.src = "/branding/logo.jpg";
+
+            if (logoImg.complete) {
+                startTimer();
+            } else {
+                // Failsafe for the logo itself taking too long
+                setTimeout(startTimer, 3000);
+            }
+        });
 
         const imagesPromise = Promise.all(
             works.map(
@@ -71,7 +91,7 @@ export default function Gallery({ works }: GalleryProps) {
 
         const fallbackTimer = setTimeout(() => {
             if (isActive) setIsLoading(false);
-        }, 6000);
+        }, 8000);
 
         return () => {
             isActive = false;

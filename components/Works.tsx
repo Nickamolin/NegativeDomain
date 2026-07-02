@@ -1,19 +1,10 @@
 import React from 'react';
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Gallery from "./Gallery";
+import { localWorks } from "@/lib/works";
 
-export default async function Projects() {
-    const supabase = createSupabaseServerClient();
-
-    const { data: works, error } = await supabase
-        .from("works")
-        .select("id, title, src_url, date_published")
-        // .order("date_published", { ascending: false });
-        .order("id", { ascending: false })
-
-    if (error) {
-        return <pre>Failed to load works: {error.message}</pre>
-    }
+export default function Projects() {
+    // Reverse the works array to display the latest works first, matching previous order
+    const works = [...localWorks].reverse();
 
     return (
         <Gallery works={works} />
