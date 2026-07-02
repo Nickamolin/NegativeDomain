@@ -22,7 +22,7 @@ The project features a **Smart Interaction Model** that differentiates between d
 - **Desktop**: Clean images are revealed via instant CSS `group-hover` transitions, restricted to fine-pointers only to prevent touch-interaction bugs.
 - **Mobile/Touch**: Implements a `pointer: coarse` detection system that enables a tap-to-toggle highlighting mechanism, allowing touch users to focus on one image at a time.
 
-The loading lifecycle is managed by a **Bulletproof Asset Preloader** that programmatically fetches all artwork from a **Supabase** backend. It features a **CRT-enhanced branding screen** with individualized flicker effects, utilizing `img.complete` checks and global failsafe timers to ensure a seamless transition to the interactive gallery.
+The loading lifecycle is managed by a **Bulletproof Asset Preloader** that programmatically preloads all artwork from local static assets. It features a **CRT-enhanced branding screen** with individualized flicker effects, utilizing `img.complete` checks and global failsafe timers to ensure a seamless transition to the interactive gallery.
 
 <h3>Skills Learned</h3>
 
@@ -35,4 +35,4 @@ The loading lifecycle is managed by a **Bulletproof Asset Preloader** that progr
 - **Framer Motion 12** - Implementing smooth, independent parallax column scrolling.
 - **Tailwind CSS 4** - Implementing the latest utility-first styling patterns and theme configurations.
 - **Mobile Interaction Stability** - Resolving "Sticky Hover" bugs and ensuring 100vh layout stability across modern mobile browsers.
-- **Supabase Integration** - Dynamic data fetching and image storage management for a scalable gallery backend.
+- **Static Asset Optimization** - Migrated from a database backend to a static configuration for instant load times, offline support, and zero-cost hosting.
